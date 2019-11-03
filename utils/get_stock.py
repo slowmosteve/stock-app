@@ -22,20 +22,21 @@ key = cfg["iex"]["api publishable key"]
 
 # uncomment for use in cloud function
 # list_symbols = [
-#     "AXP",
 #     "AAPL",
+#     "AXP",
 #     "BA",
 #     "CAT",
 #     "CSCO",
 #     "CVX",
-#     "XOM",
+#     "DIS",
+#     "DOW",
 #     "GS",
 #     "HD",
 #     "IBM",
 #     "INTC",
 #     "JNJ",
-#     "KO",
 #     "JPM",
+#     "KO",
 #     "MCD",
 #     "MMM",
 #     "MRK",
@@ -46,12 +47,11 @@ key = cfg["iex"]["api publishable key"]
 #     "TRV",
 #     "UNH",
 #     "UTX",
-#     "VZ",
 #     "V",
+#     "VZ",
 #     "WBA",
 #     "WMT",
-#     "DIS",
-#     "DOW"
+#     "XOM"
 # ]
 
 # util script gets symbol list from yaml
@@ -108,7 +108,7 @@ with open(filename, 'w') as obj:
     for i in output:
         obj.write(i+'\n')
     print("converted file to newline delimited json")
-    
+
 # remove preprocessed file
 if os.path.exists(filename_preprocess):
     os.remove(filename_preprocess)
