@@ -28,7 +28,7 @@ source_bucket = gcs_client.get_bucket(source_bucket_name)
 destination_bucket = gcs_client.get_bucket(destination_bucket_name)
 
 # set date for files to upload
-file_date = "2019-11-02"
+file_date = "2019-11-03"
 
 # loop through company symbols and load files matching the date
 for i in range(len(company_list)):
