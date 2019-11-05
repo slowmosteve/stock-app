@@ -26,123 +26,123 @@ def get_news_data(request):
     company_info = [
         {
         "symbol": "AAPL",
-        "companyName": "Apple, Inc."
+        "company name": "Apple, Inc."
         },
         {
         "symbol": "AXP",
-        "companyName": "American Express Co."
+        "company name": "American Express Co."
         },
         {
         "symbol": "BA",
-        "companyName": "The Boeing Co."
+        "company name": "The Boeing Co."
         },
         {
         "symbol": "CAT",
-        "companyName": "Caterpillar, Inc."
+        "company name": "Caterpillar, Inc."
         },
         {
         "symbol": "CSCO",
-        "companyName": "Cisco Systems, Inc."
+        "company name": "Cisco Systems, Inc."
         },
         {
         "symbol": "CVX",
-        "companyName": "Chevron Corp."
+        "company name": "Chevron Corp."
         },
         {
         "symbol": "DIS",
-        "companyName": "The Walt Disney Co."
+        "company name": "The Walt Disney Co."
         },
         {
         "symbol": "DOW",
-        "companyName": "Dow, Inc."
+        "company name": "Dow, Inc."
         },
         {
         "symbol": "GS",
-        "companyName": "The Goldman Sachs Group, Inc."
+        "company name": "The Goldman Sachs Group, Inc."
         },
         {
         "symbol": "HD",
-        "companyName": "The Home Depot, Inc."
+        "company name": "The Home Depot, Inc."
         },
         {
         "symbol": "IBM",
-        "companyName": "International Business Machines Corp."
+        "company name": "International Business Machines Corp."
         },
         {
         "symbol": "INTC",
-        "companyName": "Intel Corp."
+        "company name": "Intel Corp."
         },
         {
         "symbol": "JNJ",
-        "companyName": "Johnson & Johnson"
+        "company name": "Johnson & Johnson"
         },
         {
         "symbol": "JPM",
-        "companyName": "JPMorgan Chase & Co."
+        "company name": "JPMorgan Chase & Co."
         },
         {
         "symbol": "KO",
-        "companyName": "The Coca-Cola Co."
+        "company name": "The Coca-Cola Co."
         },
         {
         "symbol": "MCD",
-        "companyName": "McDonald's Corp."
+        "company name": "McDonald's Corp."
         },
         {
         "symbol": "MMM",
-        "companyName": "3M Co."
+        "company name": "3M Co."
         },
         {
         "symbol": "MRK",
-        "companyName": "Merck & Co., Inc."
+        "company name": "Merck & Co., Inc."
         },
         {
         "symbol": "MSFT",
-        "companyName": "Microsoft Corp."
+        "company name": "Microsoft Corp."
         },
         {
         "symbol": "NKE",
-        "companyName": "NIKE, Inc."
+        "company name": "NIKE, Inc."
         },
         {
         "symbol": "PFE",
-        "companyName": "Pfizer Inc."
+        "company name": "Pfizer Inc."
         },
         {
         "symbol": "PG",
-        "companyName": "Procter & Gamble Co."
+        "company name": "Procter & Gamble Co."
         },
         {
         "symbol": "TRV",
-        "companyName": "The Travelers Cos., Inc."
+        "company name": "The Travelers Cos., Inc."
         },
         {
         "symbol": "UNH",
-        "companyName": "UnitedHealth Group, Inc."
+        "company name": "UnitedHealth Group, Inc."
         },
         {
         "symbol": "UTX",
-        "companyName": "United Technologies Corp."
+        "company name": "United Technologies Corp."
         },
         {
         "symbol": "V",
-        "companyName": "Visa, Inc."
+        "company name": "Visa, Inc."
         },
         {
         "symbol": "VZ",
-        "companyName": "Verizon Communications, Inc."
+        "company name": "Verizon Communications, Inc."
         },
         {
         "symbol": "WBA",
-        "companyName": "Walgreens Boots Alliance, Inc."
+        "company name": "Walgreens Boots Alliance, Inc."
         },
         {
         "symbol": "WMT",
-        "companyName": "Walmart, Inc."
+        "company name": "Walmart, Inc."
         },
         {
         "symbol": "XOM",
-        "companyName": "Exxon Mobil Corp."
+        "company name": "Exxon Mobil Corp."
         }
     ]
 
@@ -161,7 +161,7 @@ def get_news_data(request):
     # loop through companies and search for articles using company names
     for i in range(len(company_info)):
         params = {
-            'q':company_info[i]["companyName"],
+            'q':company_info[i]["company name"],
             'from':query_date,
             'language':'en',
             'sortBy':'relevancy',
@@ -171,7 +171,7 @@ def get_news_data(request):
 
         # populate articles json object with query results
         if (resp.status_code == 200):
-            print("request successful for company: {}".format(company_info[i]["companyName"]))
+            print("request successful for company: {}".format(company_info[i]["company name"]))
             articles = resp.json()['articles']
             total_results = resp.json()['totalResults']
 
