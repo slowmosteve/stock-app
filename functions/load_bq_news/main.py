@@ -8,23 +8,21 @@ def load_bigquery(event, context):
          event (dict): Event payload.
          context (google.cloud.functions.Context): Metadata for the event.
     """
+    # use this flag to enable loading data (otherwise will only print logs that the file was found)
+    bq_active = True
+    
     # retrieve environment variables
     dataset_id = os.environ.get("bq_dataset")
     table_id = os.environ.get("bq_table")
     source_bucket_name = os.environ.get("gcs_bucket_staging")
     destination_bucket_name = os.environ.get("gcs_bucket_processed")
     
-    print("destination bucket name: {}".format(destination_bucket_name))
-    
     # change working directory to tmp folder in order to write to disk
     os.chdir("/tmp")
 
     file = event
     print("Found file: {}".format(file['name']))
-    
-    # use this flag to enable loading data (otherwise will only print logs that the file was found)
-    bq_active = True
-    
+
     # bigquery config
     bq_client = bigquery.Client()
     job_config = bigquery.LoadJobConfig()
@@ -35,10 +33,7 @@ def load_bigquery(event, context):
     gcs_client = storage.Client()
     source_file_uri = "gs://{}/{}".format(source_bucket_name, file["name"])
     source_bucket = gcs_client.get_bucket(source_bucket_name)
-    try:
-    	destination_bucket = gcs_client.get_bucket(destination_bucket_name)
-    except Exception as e:
-        print("Error: {}".format(e))
+    destination_bucket = gcs_client.get_bucket(destination_bucket_name)
     
     if bq_active:
         # load data to bigquery
