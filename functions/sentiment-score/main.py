@@ -41,7 +41,7 @@ def get_sentiment(string_list):
     return sentiment, subjectivity
 
 def sentiment_score(request):
-    """A function to generate sentiment scores for news text and store in BigQuery
+    """A function to generate sentiment scores for news text and upload to Cloud Storage
 
     Args:
         request (flask.Request): HTTP request object
@@ -84,6 +84,10 @@ def sentiment_score(request):
         field_sentiment = field + "_sentiment"
         field_subjectivity = field + "_subjectivity"
         df[field_sentiment], df[field_subjectivity] = get_sentiment(df[field])
+
+    # convert date format to string
+    df["date"] = pandas.to_datetime(df["date"])
+    df["date"] = df["date"].dt.strftime("%Y-%m-%d")
 
     # save to new line delimited json
     filename = "{}_sentiment.json".format(date)
