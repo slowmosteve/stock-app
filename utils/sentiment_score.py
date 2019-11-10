@@ -1,4 +1,4 @@
-# utility script for generating sentiment scores and storing to BigQuery
+# utility script for generating sentiment scores and storing to Cloud Storage
 
 import os
 import yaml
@@ -8,6 +8,9 @@ import datetime
 import textblob
 from google.cloud import bigquery
 from google.cloud import storage
+
+# specify date to generate scores for
+date = "2019-11-08"
 
 # get config details from YAML
 config_file = "util_config.yaml"
@@ -25,9 +28,6 @@ bucket_name = cfg["storage"]["sentiment staging"]
 gcs_client = storage.Client()
 gcs_bucket = gcs_client.get_bucket(bucket_name)
 
-# specify date to generate scores for
-date = "2019-11-08"
-
 # define query
 bq_query = """
     SELECT
@@ -43,11 +43,12 @@ bq_query = """
         date = "{}"
 """.format(project_id, dataset_id, table_id, date)
 
-query_job = client.query(bq_query)  # API request
-query_result = query_job.result()  # Waits for query to finish
+# run query
+query_job = client.query(bq_query)
+query_result = query_job.result()
 print("Query results found: {}".format(query_result.total_rows))
 
-# store query results in dataframe
+# store query results in dataframe and replace nulls with empty strings
 df = query_result.to_dataframe()
 df.fillna("", inplace=True)
 
