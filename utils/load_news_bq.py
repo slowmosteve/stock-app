@@ -9,7 +9,6 @@ from google.cloud import storage
 config_file = "util_config.yaml"
 with open(config_file, 'r') as yamlfile:
     cfg = yaml.safe_load(yamlfile)
-company_list = cfg["company info"]
 
 # configure BQ details
 project_id = cfg["project id"]
@@ -27,23 +26,20 @@ gcs_client = storage.Client()
 source_bucket = gcs_client.get_bucket(source_bucket_name)
 destination_bucket = gcs_client.get_bucket(destination_bucket_name)
 
-# set date for files to upload
-file_date = "2019-11-03"
-
-# loop through company symbols and load files matching the date
-for i in range(len(company_list)):
+# list files in source bucket
+for blob in source_bucket.list_blobs():
     try:
         # set file name and GCS bucket URI
-        filename = "{}_{}_news.json".format(file_date, company_list[i]["symbol"])
+        filename = blob.name
+        print("found file: {}".format(filename))
         file_uri = "gs://{}/{}".format(source_bucket_name, filename)
 
         # load file to BQ
         load_job = bq_client.load_table_from_uri(file_uri, dataset_ref.table(news_table_id), job_config=job_config)
-        print("Starting job {}".format(load_job.job_id))
+        print("starting job {}".format(load_job.job_id))
         load_job.result()
-        print("Loaded file to BigQuery: {}".format(filename))
         destination_table = bq_client.get_table(dataset_ref.table(news_table_id))
-        print("Loaded {} rows.".format(destination_table.num_rows))
+        print("loaded {} rows to BigQuery".format(destination_table.num_rows))
 
         # transfer file to processed bucket
         source_blob = source_bucket.blob(filename)

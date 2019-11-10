@@ -25,9 +25,10 @@ bucket_name = cfg["storage"]["sentiment staging"]
 gcs_client = storage.Client()
 gcs_bucket = gcs_client.get_bucket(bucket_name)
 
+# specify date to generate scores for
+date = "2019-11-08"
+
 # define query
-symbol = "AAPL"
-date = "2019-11-01"
 bq_query = """
     SELECT
         symbol,
@@ -39,9 +40,8 @@ bq_query = """
     FROM
         `{}.{}.{}`
     WHERE
-        symbol = "{}"
-        AND date = "{}"
-""".format(project_id, dataset_id, table_id, symbol, date)
+        date = "{}"
+""".format(project_id, dataset_id, table_id, date)
 
 query_job = client.query(bq_query)  # API request
 query_result = query_job.result()  # Waits for query to finish
@@ -49,6 +49,7 @@ print("Query results found: {}".format(query_result.total_rows))
 
 # store query results in dataframe
 df = query_result.to_dataframe()
+df.fillna("", inplace=True)
 
 # create an insert id and date for the job
 insert_id = str(uuid.uuid4())
@@ -86,8 +87,12 @@ for field in string_fields:
 
 print(df.head())
 
+# convert date format to string
+df["date"] = pandas.to_datetime(df["date"])
+df["date"] = df["date"].dt.strftime("%Y-%m-%d")
+
 # save to new line delimited json
-filename = "{}_{}_sentiment.json".format(date, symbol)
+filename = "{}_sentiment.json".format(date)
 df.to_json(filename, orient="records", lines=True)
 
 # upload sentiment scores to storage
